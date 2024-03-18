@@ -29,7 +29,6 @@ sumItemsPrices([H|T], Price):-
 
 
 
-
 /* Q2 */
 
 
@@ -42,9 +41,6 @@ sumItemsPrices([H|T], Price):-
 
 
 /* Q3 */
-
-
-
 
 
 
@@ -79,12 +75,12 @@ sumItemsPrices([H|T], Price):-
 
 
 
+isBoycott(Item):-
+    item(Item, Company, _),
+    boycott_company(Company, _).
 
-
-
-
-
-
+isBoycott(Company):-
+    boycott_company(Company, _).
 
 
 
@@ -92,26 +88,33 @@ sumItemsPrices([H|T], Price):-
 
 
 
+whyToBoycott(Item, Justification):-
+    item(Item, Company, _),
+    boycott_company(Company, Justification).
 
 
-
-
+whyToBoycott(Company, Justification):-
+    boycott_company(Company, Justification).
 
 
 
 /* Q8 */
 
 
+filterBoycottedItems([], []).
+filterBoycottedItems([Item|Reminder], Filtered):-
+    (
+        isBoycott(Item)
+        -> filterBoycottedItems(Reminder, Filtered)
+        ; Filtered = [Item|ReminderList],
+        filterBoycottedItems(Reminder, ReminderList)
+    ).
 
-
-
-
-
-
-
-
-
-
+removeBoycottItemsFromAnOrder(UserName, OrderID, NewList):-
+    getItemsInOrderById(UserName, OrderID, Items),
+    filterBoycottedItems(Items, FilteredItems),
+    NewList = FilteredItems.
+    
 
 
 /* Q9 */
