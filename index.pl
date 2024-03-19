@@ -27,11 +27,19 @@ countItems([_|T], Count):-
     Count is RestCount + 1.
 
 /* Q1 */
-   list_orders(X,[Y]):- customer(ID,X),order(ID,Z,S), Y = order(ID,Z,S).
 
 
+list_orders(X, L):- 
+    customer(ID,X),
+    list_orders_helper(ID, [], L).
+    
+list_orders_helper(ID, L, Orders):-
+    order(ID, OrderID, Items),
+    not(list_member(order(ID, OrderID, Items), L)),
+    list_append(L, [order(ID, OrderID, Items)], NewL),
+    list_orders_helper(ID, NewL, Orders).
 
-
+list_orders_helper(_, L, L).
 
 
 /* Q2 */
