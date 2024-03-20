@@ -21,9 +21,9 @@ sumItemsPrices([H|T], Price):-
     item(H, _, ItemPrice),
     Price is ReturnedPrice + ItemPrice.
     
-countItems([], 0).
-countItems([_|T], Count):-
-    countItems(T, RestCount),
+countAll([], 0).
+countAll([_|T], Count):-
+    countAll(T, RestCount),
     Count is RestCount + 1.
 
 /* Q1 */
@@ -44,7 +44,7 @@ list_orders_helper(_, L, L).
 
 /* Q2 */
 
-
+    countOrdersOfCustomer(CustomerName,Count):- list_orders(CustomerName,Orders),Y = Orders , countAll(Y,Count).
 
 
 
@@ -60,7 +60,7 @@ list_orders_helper(_, L, L).
 
 
 /* Q4 */
-  getNumOfItems(CustomerName,OrderID,Count):- getItemsInOrderById(CustomerName,OrderID,Items),countItems(Items,Count).
+  getNumOfItems(CustomerName,OrderID,Count):- getItemsInOrderById(CustomerName,OrderID,Items),countAll(Items,Count).
 
 
 
@@ -184,8 +184,29 @@ calcPriceAfterReplacingBoycottItemsFromAnOrder(Name, OrderID, NewList, TotalPric
 
 
 /* Q12 */
+:- dynamic(item/3).
+   add_item(ItemName, Company, Price) :-
+     assert(item(ItemName, Company, Price)).
 
-add_item(ItemName, Company, Price) :-
-   assert(item(ItemName, Company, Price)),
-   !.
+:-dynamic(alternative/2).
+     add_alt(Alternative,Boycott):-
+       assert(alternative(Alternative,Boycott)).
+
+:-dynamic(boycott_company/2).
+     add_boycott(CompanyName,Reason):-
+       assert(boycott_company(CompanyName,Reason)).
+
+
+ :- dynamic(item/3).
+   remove_item(ItemName, Company, Price) :-
+     retract(item(ItemName, Company, Price)).
+
+:-dynamic(alternative/2).
+     remove_alt(Alternative,Boycott):-
+       retract(alternative(Alternative,Boycott)).
+
+:-dynamic(boycott_company/2).
+     remove_boycott(CompanyName,Reason):-
+       retract(boycott_company(CompanyName,Reason)).
+
 
