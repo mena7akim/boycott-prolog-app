@@ -48,15 +48,5 @@ The data file contains facts about customers, items, orders, boycott companies, 
     - To remove an item: `remove_item(ItemName, CompanyName, Price)`
     - Example: `add_item(alpella_wafer, 'Alpella', 4)`
 
-## How to Use
-
-1. Ensure you have `data.pl` file with the required facts.
-2. Load the file into your Prolog environment.
-3. Execute the desired predicate using the provided examples.
-
-## Contributors
-
-- [Your Name](link to your profile or contact information)
-- [Another Contributor](link to their profile or contact information)
 
 
