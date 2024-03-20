@@ -28,7 +28,6 @@ countAll([_|T], Count):-
 
 /* Q1 */
 
-
 list_orders(X, L):- 
     customer(ID,X),
     list_orders_helper(ID, [], L).
@@ -43,48 +42,22 @@ list_orders_helper(_, L, L).
 
 
 /* Q2 */
-
     countOrdersOfCustomer(CustomerName,Count):- list_orders(CustomerName,Orders),Y = Orders , countAll(Y,Count).
-
-
-
-
-
 
 
 /* Q3 */
    getItemsInOrderById(CustomerName,OrderID,Items):- customer(CustomerID,CustomerName),order(CustomerID,OrderID,Items).
 
 
-
-
-
 /* Q4 */
   getNumOfItems(CustomerName,OrderID,Count):- getItemsInOrderById(CustomerName,OrderID,Items),countAll(Items,Count).
-
-
-
-
-
-
-
-
 
 
 /* Q5 */
    calcPriceOfOrder(CustomerName,OrderID,TotalPrice):- getItemsInOrderById(CustomerName,OrderID,Items),sumItemsPrices(Items, TotalPrice).
 
 
-
-
-
-
-
-
-
-
 /* Q6 */
-
 
 
 isBoycott(Item):-
@@ -95,9 +68,7 @@ isBoycott(Company):-
     boycott_company(Company, _).
 
 
-
 /* Q7 */
-
 
 
 whyToBoycott(Item, Justification):-
@@ -107,7 +78,6 @@ whyToBoycott(Item, Justification):-
 
 whyToBoycott(Company, Justification):-
     boycott_company(Company, Justification).
-
 
 
 /* Q8 */
@@ -128,39 +98,30 @@ removeBoycottItemsFromAnOrder(UserName, OrderID, NewList):-
     NewList = FilteredItems.
     
 
-
 /* Q9 */
 
 
-replaceBoycottHelper([], _):- !.
+replaceBoycottHelper([], []):- !.
 
-replaceBoycottHelper([H|T], NewList):-
+replaceBoycottHelper([H|T], [H|ReturnedList]):-
     item(H, CompanyName, _),
     \+ boycott_company(CompanyName, _),
     replaceBoycottHelper(T, ReturnedList),
-    list_append(ReturnedList, [H], NewList),
     !.
 
-replaceBoycottHelper([H|T], NewList):-
-    item(H, CompanyName, _),
-    boycott_company(CompanyName, _),
+replaceBoycottHelper([H|T], [Alt|ReturnedList]):-
     alternative(H, Alt),
     replaceBoycottHelper(T, ReturnedList),
-    list_append(ReturnedList, [Alt], NewList),
     !.
 
-replaceBoycottHelper([H|T], NewList):-
-    item(H, CompanyName, _),
-    boycott_company(CompanyName, _),
+replaceBoycottHelper([H|T], ReturnedList):-
     \+ alternative(H, _),
     replaceBoycottHelper(T, ReturnedList),
-    list_append(ReturnedList, [], NewList),
     !.
 
 replaceBoycottItemsFromAnOrder(Name, OrderID, NewList):-
     getItemsInOrderById(Name, OrderID, Items),
     replaceBoycottHelper(Items, NewList).
-
 
 
 /* Q10 */
@@ -172,15 +133,6 @@ calcPriceAfterReplacingBoycottItemsFromAnOrder(Name, OrderID, NewList, TotalPric
 /* Q11 */
    getTheDifferenceInPriceBetweenItemAndAlternative(Alternative,Boycott,DiffPrice):-
               alternative(Alternative,Boycott),item(Alternative,_,Price1),item(Boycott,_,Price2),DiffPrice is Price1 - Price2.
-
-
-
-
-
-
-
-
-
 
 
 /* Q12 */
