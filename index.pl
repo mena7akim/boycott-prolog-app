@@ -36,25 +36,36 @@ list_orders_helper(ID, L, Orders):-
     order(ID, OrderID, Items),
     not(list_member(order(ID, OrderID, Items), L)),
     list_append(L, [order(ID, OrderID, Items)], NewL),
-    list_orders_helper(ID, NewL, Orders).
+    list_orders_helper(ID, NewL, Orders),
+    !.
 
 list_orders_helper(_, L, L).
 
 
 /* Q2 */
-    countOrdersOfCustomer(CustomerName,Count):- list_orders(CustomerName,Orders),Y = Orders , countAll(Y,Count).
+countOrdersOfCustomer(CustomerName,Count):- 
+    list_orders(CustomerName,Orders),
+    Y = Orders,
+    countAll(Y,Count).
 
 
 /* Q3 */
-   getItemsInOrderById(CustomerName,OrderID,Items):- customer(CustomerID,CustomerName),order(CustomerID,OrderID,Items).
+getItemsInOrderById(CustomerName,OrderID,Items):- 
+    customer(CustomerID,CustomerName),
+    order(CustomerID,OrderID,Items),
+    !.
 
 
 /* Q4 */
-  getNumOfItems(CustomerName,OrderID,Count):- getItemsInOrderById(CustomerName,OrderID,Items),countAll(Items,Count).
+getNumOfItems(CustomerName,OrderID,Count):- 
+    getItemsInOrderById(CustomerName,OrderID,Items),
+    countAll(Items,Count).
 
 
 /* Q5 */
-   calcPriceOfOrder(CustomerName,OrderID,TotalPrice):- getItemsInOrderById(CustomerName,OrderID,Items),sumItemsPrices(Items, TotalPrice).
+calcPriceOfOrder(CustomerName,OrderID,TotalPrice):- 
+    getItemsInOrderById(CustomerName,OrderID,Items),
+    sumItemsPrices(Items, TotalPrice).
 
 
 /* Q6 */
@@ -62,7 +73,8 @@ list_orders_helper(_, L, L).
 
 isBoycott(Item):-
     item(Item, Company, _),
-    boycott_company(Company, _).
+    boycott_company(Company, _),
+    !.
 
 isBoycott(Company):-
     boycott_company(Company, _).
@@ -73,7 +85,8 @@ isBoycott(Company):-
 
 whyToBoycott(Item, Justification):-
     item(Item, Company, _),
-    boycott_company(Company, Justification).
+    boycott_company(Company, Justification),
+    !.
 
 
 whyToBoycott(Company, Justification):-
@@ -131,8 +144,11 @@ calcPriceAfterReplacingBoycottItemsFromAnOrder(Name, OrderID, NewList, TotalPric
     sumItemsPrices(NewList, TotalPrice).
 
 /* Q11 */
-   getTheDifferenceInPriceBetweenItemAndAlternative(Alternative,Boycott,DiffPrice):-
-              alternative(Alternative,Boycott),item(Alternative,_,Price1),item(Boycott,_,Price2),DiffPrice is Price1 - Price2.
+getTheDifferenceInPriceBetweenItemAndAlternative(Alternative,Boycott,DiffPrice):-
+    alternative(Alternative,Boycott),
+    item(Alternative,_,Price1),
+    item(Boycott,_,Price2),
+    DiffPrice is Price1 - Price2.
 
 
 /* Q12 */
