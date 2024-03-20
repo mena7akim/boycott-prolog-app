@@ -41,8 +41,6 @@ The data file contains facts about customers, items, orders, boycott companies, 
 11. **Get the Difference in Price Between an Item and its Alternative**: `getTheDifferenceInPriceBetweenItemAndAlternative(ItemOrCompanyName, AlternativeItem, PriceDifference)`
     - Example: `getTheDifferenceInPriceBetweenItemAndAlternative(lipton, AlternativeItem, PriceDifference)`
 
-### Bonus Predicate
-
 12. **Insert/Remove Item, Alternative, or New Boycott Company**: 
     - To add an item: `add_item(ItemName, CompanyName, Price)`
     - To remove an item: `remove_item(ItemName, CompanyName, Price)`
