@@ -35,7 +35,7 @@ list_orders_helper(ID, L, Orders):-
     order(ID, OrderID, Items),
     not(list_member(order(ID, OrderID, Items), L)),
     list_append(L, [order(ID, OrderID, Items)], NewL),
-    list_orders_helper(ID, NewL, Orders).
+    list_orders_helper(ID, NewL, Orders) , !.
 
 list_orders_helper(_, L, L).
 
