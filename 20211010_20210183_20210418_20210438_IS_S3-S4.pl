@@ -28,18 +28,20 @@ countAll([_|T], Count):-
 
 /* Q1 */
 
-list_orders(X, L):- 
-    customer(ID,X),
-    list_orders_helper(ID, [], L).
-    
-list_orders_helper(ID, L, Orders):-
-    order(ID, OrderID, Items),
-    not(list_member(order(ID, OrderID, Items), L)),
-    list_append(L, [order(ID, OrderID, Items)], NewL),
-    list_orders_helper(ID, NewL, Orders),
+add_orders(CustID, Orders, Visited):-
+    order(CustID, OrderID, Items),
+    State = order(CustID, OrderID, Items),
+    not(list_member(State, Visited)),
+    list_append(Visited, [State], NewVisited),
+    add_orders(CustID, Orders, NewVisited),
     !.
 
-list_orders_helper(_, L, L).
+add_orders(_, Orders, Visited):-
+    Orders = Visited.
+
+list_orders(Name, Orders):- 
+    customer(ID, Name),
+    add_orders(ID, Orders, []).
 
 
 /* Q2 */
@@ -113,28 +115,27 @@ removeBoycottItemsFromAnOrder(UserName, OrderID, NewList):-
 
 /* Q9 */
 
+replaceBoycott([], []):- !.
 
-replaceBoycottHelper([], []):- !.
-
-replaceBoycottHelper([H|T], [H|ReturnedList]):-
+replaceBoycott([H|T], [H|ReturnedList]):-
     item(H, CompanyName, _),
     \+ boycott_company(CompanyName, _),
-    replaceBoycottHelper(T, ReturnedList),
+    replaceBoycott(T, ReturnedList),
     !.
 
-replaceBoycottHelper([H|T], [Alt|ReturnedList]):-
+replaceBoycott([H|T], [Alt|ReturnedList]):-
     alternative(H, Alt),
-    replaceBoycottHelper(T, ReturnedList),
+    replaceBoycott(T, ReturnedList),
     !.
 
-replaceBoycottHelper([H|T], ReturnedList):-
+replaceBoycott([H|T], ReturnedList):-
     \+ alternative(H, _),
-    replaceBoycottHelper(T, ReturnedList),
+    replaceBoycott(T, ReturnedList),
     !.
 
 replaceBoycottItemsFromAnOrder(Name, OrderID, NewList):-
     getItemsInOrderById(Name, OrderID, Items),
-    replaceBoycottHelper(Items, NewList).
+    replaceBoycott(Items, NewList).
 
 
 /* Q10 */
@@ -144,10 +145,11 @@ calcPriceAfterReplacingBoycottItemsFromAnOrder(Name, OrderID, NewList, TotalPric
     sumItemsPrices(NewList, TotalPrice).
 
 /* Q11 */
-getTheDifferenceInPriceBetweenItemAndAlternative(Alternative,Boycott,DiffPrice):-
-    alternative(Alternative,Boycott),
-    item(Alternative,_,Price1),
-    item(Boycott,_,Price2),
+
+getTheDifferenceInPriceBetweenItemAndAlternative(Boycott, Alternative, DiffPrice):-
+    alternative(Boycott, Alternative),
+    item(Boycott, _, Price1),
+    item(Alternative, _, Price2),
     DiffPrice is Price1 - Price2.
 
 
